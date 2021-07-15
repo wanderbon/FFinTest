@@ -28,7 +28,7 @@ const useLogic = ({ contentHeight, translation }) => {
         {
           translateY: interpolate(
             translation.value,
-            [0, contentHeight * 0.25, contentHeight - CARD_HEIGHT],
+            [0, contentHeight * 0.25, contentHeight - CARD_HEIGHT * 2],
             [
               contentHeight * 0.25 - CARD_HEIGHT,
               contentHeight * 0.25 + (contentHeight * 0.25 - CARD_HEIGHT),
@@ -51,7 +51,7 @@ const useLogic = ({ contentHeight, translation }) => {
       ),
       opacity: interpolate(
         translation.value,
-        [0, contentHeight * 0.25 - CARD_HEIGHT / 2, contentHeight * 0.25],
+        [0, contentHeight * 0.25 - CARD_HEIGHT / 2, contentHeight * 0.25 - 16],
         [1, 1, 0],
         Extrapolate.clamp,
       ),
@@ -62,17 +62,13 @@ const useLogic = ({ contentHeight, translation }) => {
     return {
       top: interpolate(
         translation.value,
-        [0, contentHeight - CARD_HEIGHT * 2],
-        [0, -CARD_HEIGHT / 2],
+        [0, contentHeight - CARD_HEIGHT * 3],
+        [-CARD_HEIGHT * 0.65, -CARD_HEIGHT * 0.65],
         Extrapolate.clamp,
       ),
       opacity: interpolate(
         translation.value,
-        [
-          0,
-          contentHeight - CARD_HEIGHT - CARD_HEIGHT / 2,
-          contentHeight - CARD_HEIGHT,
-        ],
+        [0, contentHeight * 0.35, contentHeight - CARD_HEIGHT],
         [0, 0, 1],
         Extrapolate.clamp,
       ),
@@ -83,8 +79,8 @@ const useLogic = ({ contentHeight, translation }) => {
     return {
       top: interpolate(
         translation.value,
-        [0, contentHeight * 0.25, contentHeight - CARD_HEIGHT / 2 + 16],
-        [0, 0, CARD_HEIGHT],
+        [0, CARD_HEIGHT * 0.25, contentHeight - CARD_HEIGHT / 2 + 16],
+        [CARD_HEIGHT * 0.25, CARD_HEIGHT * 0.25, CARD_HEIGHT - 16],
         Extrapolate.clamp,
       ),
       opacity: interpolate(
