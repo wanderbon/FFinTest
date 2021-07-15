@@ -11,8 +11,9 @@ import {
   CARD_HEIGHT,
   getSnapPoints,
   getTiming,
+  getDirection,
+  DIRECTION,
 } from '../../Utils/utils';
-import { snapPoint } from 'react-native-redash';
 
 const useLogic = () => {
   const { height } = useWindowDimensions();
@@ -21,12 +22,20 @@ const useLogic = () => {
   const [snapPoints, setSnapPoints] = useState(getSnapPoints(contentHeight));
   const translation = useSharedValue(0);
 
+  const lastDirection = useSharedValue('NONE');
+  const touchStart = useSharedValue(0);
+
   const gestureHandler = useAnimatedGestureHandler(
     {
-      onStart: (_, ctx) => {
+      onStart: (event, ctx) => {
         ctx.startY = translation.value;
+        touchStart.value = event.y;
+
+        lastDirection.value = getDirection(event.velocityY);
       },
       onActive: (event, ctx) => {
+        lastDirection.value = getDirection(event.velocityY);
+
         translation.value = clamp(
           ctx.startY + event.translationY,
           0,
@@ -34,9 +43,16 @@ const useLogic = () => {
         );
       },
       onEnd: event => {
-        translation.value = getTiming(
-          snapPoint(translation.value, event.velocityY, snapPoints),
-        );
+        lastDirection.value = getDirection(event.y - touchStart.value);
+
+        if (lastDirection.value === DIRECTION.BOTTOM) {
+          translation.value = getTiming(snapPoints[1]);
+        } else if (lastDirection.value === DIRECTION.TOP) {
+          translation.value = getTiming(snapPoints[0]);
+        }
+
+        touchStart.value = 0;
+        lastDirection.value = DIRECTION.NONE;
       },
     },
     [contentHeight, snapPoints],

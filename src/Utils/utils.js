@@ -20,3 +20,23 @@ export const getTiming = toValue => {
     easing: Easing.linear,
   });
 };
+
+export const DIRECTION = {
+  NONE: 'NONE',
+  TOP: 'TOP',
+  BOTTOM: 'BOTTOM',
+};
+
+export const getDirection = velocity => {
+  'worklet';
+
+  if (velocity > 0) {
+    return DIRECTION.BOTTOM;
+  }
+
+  if (velocity < 0) {
+    return DIRECTION.TOP;
+  }
+
+  return DIRECTION.NONE;
+};
